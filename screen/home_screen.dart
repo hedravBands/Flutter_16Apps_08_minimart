@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:minimart/tab/catalog_tab.dart';
 import 'package:minimart/tab/home_tab.dart';
 import 'package:minimart/widget/custom_drawer.dart';
 
@@ -21,8 +22,15 @@ class _HomeScreenState extends State<HomeScreen> {
           body: HomeTab(),
           drawer: CustomDrawer(_pageController),
         ),
-        Container(color: Colors.red
+        Scaffold(
+          appBar: AppBar(
+            title: Text("Catalog"),
+            centerTitle: true,
+          ),
+          drawer: CustomDrawer(_pageController),
+          body: CatalogTab(),
         ),
+
         Container(color: Colors.deepOrange
         ),
 
