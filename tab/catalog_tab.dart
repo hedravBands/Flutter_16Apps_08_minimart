@@ -11,7 +11,6 @@ class CatalogTab extends StatelessWidget {
           if(!snapshot.hasData)
             return Center(child: CircularProgressIndicator(),);
           else {
-
             var dividedTiles = ListTile
                 .divideTiles(
                   tiles: snapshot.data.documents.map((doc){
