@@ -3,13 +3,24 @@ import 'package:minimart/model/user_model.dart';
 import 'package:minimart/screen/signup_screen.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
 
-  final _formKey = GlobalKey<FormState>();
+
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+
+  final _emailController    =   TextEditingController();
+  final _passController     =   TextEditingController();
+  final _formKey            =   GlobalKey<FormState>();
+  final _scaffoldKey        =   GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text("Enter",
         style: TextStyle(
@@ -40,6 +51,7 @@ class LoginScreen extends StatelessWidget {
             padding: EdgeInsets.all(16.0),
             children: <Widget>[
               TextFormField(
+                controller: _emailController,
                 decoration: InputDecoration(
                     hintText: 'E-mail'
                 ),
@@ -51,18 +63,40 @@ class LoginScreen extends StatelessWidget {
               ),
               SizedBox(height: 16.0,),
               TextFormField(
+                controller: _passController,
                 decoration: InputDecoration(
                     hintText: 'Password'
                 ),
                 obscureText: true,
                 validator: (text){
+                  // ignore: missing_return
                   if ( text.isEmpty || text.length < 6) return "Invalid Password";
                 },
               ),
               Align(
                 alignment: Alignment.centerRight,
                 child: FlatButton(
-                  onPressed: (){},
+                  onPressed: (){
+                    if (_emailController.text.isEmpty)
+                    _scaffoldKey.currentState.showSnackBar(
+                        SnackBar(
+                          content: Text("Please inform your email to recover password!"),
+                          backgroundColor: Theme.of(context).errorColor,
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    else{
+                      model.recoverPass(_emailController.text);
+
+                    _scaffoldKey.currentState.showSnackBar(
+                      SnackBar(
+                        content: Text("Check your Email inbox!"),
+                        backgroundColor: Theme.of(context).primaryColor,
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                    }
+                  },
                   child: Text('Forgot your password?',
                     textAlign: TextAlign.right,
                   ),
@@ -83,7 +117,12 @@ class LoginScreen extends StatelessWidget {
                     onPressed: (){
                       if (_formKey.currentState.validate()){
                       }
-                      model.signIn();
+                      model.signIn(
+                        email: _emailController.text,
+                        pass: _passController.text,
+                        onSuccess: _onSuccess,
+                        onFail: _onFail
+                      );
 
                     }),
               ),
@@ -94,4 +133,32 @@ class LoginScreen extends StatelessWidget {
     )
     );
   }
+
+  void _onSuccess(){
+    Navigator.of(context).pop();
+    //copied from signUp
+    // _scaffoldKey.currentState.showSnackBar(
+    //   SnackBar(
+    //     content: Text("User created successfully!"),
+    //     backgroundColor: Theme.of(context).primaryColor,
+    //     duration: Duration(seconds: 2),
+    //   ),
+    // );
+    // Future.delayed(Duration(seconds: 2)).then((_){
+    //   Navigator.of(context).pop();
+    // });
+  }
+
+  void _onFail(){
+    _scaffoldKey.currentState.showSnackBar(
+      SnackBar(
+        content: Text("Cannot login! Maybe it's the Password!"),
+        backgroundColor: Theme.of(context).errorColor,
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
+
+
+
 }
