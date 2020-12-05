@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:minimart/tab/catalog_tab.dart';
 import 'package:minimart/tab/home_tab.dart';
+import 'package:minimart/widget/cart_button.dart';
 import 'package:minimart/widget/custom_drawer.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -21,6 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Scaffold(
           body: HomeTab(),
           drawer: CustomDrawer(_pageController),
+          floatingActionButton: CartButton(),
         ),
         Scaffold(
           appBar: AppBar(
@@ -29,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           drawer: CustomDrawer(_pageController),
           body: CatalogTab(),
+          floatingActionButton: CartButton(),
         ),
 
         Container(color: Colors.deepOrange

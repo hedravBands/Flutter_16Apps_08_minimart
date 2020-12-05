@@ -1,7 +1,14 @@
 import 'package:carousel_pro/carousel_pro.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:minimart/data/cart_product.dart';
 import 'package:minimart/data/product_data.dart';
+import 'package:minimart/model/cart_model.dart';
+import 'package:minimart/model/user_model.dart';
+import 'package:minimart/screen/login_screen.dart';
+
+import 'cart_screen.dart';
 
 class ProductScreen extends StatefulWidget {
 
@@ -109,8 +116,29 @@ class _ProductScreenState extends State<ProductScreen> {
                 height: 44.0,
                 child: RaisedButton(
                   onPressed: size != null ?
-                      (){} : null,
-                  child: Text('Add to Cart',
+                      (){
+                        if (UserModel.of(context).isLoggedIn()){
+
+                          CartProduct cartProduct = CartProduct();
+                          cartProduct.size = size;
+                          cartProduct.quantity = 1;
+                          cartProduct.pid = product.id;
+                          cartProduct.category = product.category;
+
+                          CartModel.of(context).addCartItem(cartProduct);
+
+                          Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) => CartScreen())
+                          );
+
+                        } else {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => LoginScreen())
+                          );
+                        }
+                      } : null,
+                  child: Text(UserModel.of(context).isLoggedIn() ? "Add to Cart"
+                    : "Enter to Buy",
                   style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
                   ),
                   color: primaryColor,
