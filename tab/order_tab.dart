@@ -14,7 +14,7 @@ class OrderTab extends StatelessWidget {
 
       return FutureBuilder<QuerySnapshot>(
           future: Firestore.instance.collection("user").document(uid)
-            .collection("order").getDocuments(),
+            .collection("order").getDocuments(),  //after collection there exists .orderBy
           builder: (context, snapshot){
             if (!snapshot.hasData)
               return Center(
@@ -24,7 +24,7 @@ class OrderTab extends StatelessWidget {
               return ListView(
                 children: snapshot.data.documents.map(
                         (doc)=>OrderTile(doc.documentID)
-                ).toList(),
+                ).toList().reversed.toList(), //to get last orders first (?)
               );
             }
 
