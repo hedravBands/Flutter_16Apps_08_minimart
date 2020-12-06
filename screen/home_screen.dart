@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:minimart/tab/catalog_tab.dart';
 import 'package:minimart/tab/home_tab.dart';
+import 'package:minimart/tab/order_tab.dart';
 import 'package:minimart/widget/cart_button.dart';
 import 'package:minimart/widget/custom_drawer.dart';
 
@@ -34,9 +35,18 @@ class _HomeScreenState extends State<HomeScreen> {
           floatingActionButton: CartButton(),
         ),
 
-        Container(color: Colors.deepOrange
+        Container(color: Colors.yellow
         ),
 
+
+        Scaffold(
+          appBar: AppBar(
+            title: Text("My Orders"),
+            centerTitle: true,
+          ),
+          body: OrderTab(),
+          drawer: CustomDrawer(_pageController),
+        ),
 
       ],
     );
